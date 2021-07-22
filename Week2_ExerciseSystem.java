@@ -153,6 +153,12 @@ void input()
 				ExerciseS.printDataAggregate(E);
 			else if(mode==2)
 				ExerciseS.printDataDetailed(E);
+			else
+			{
+				System.out.println("Wrong data entered,Printing in Aggregate Mode");
+				ExerciseS.printDataAggregate(E);
+			}
+				
 		}
 	}
 }
