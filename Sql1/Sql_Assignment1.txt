@@ -1,0 +1,93 @@
+Create a simple table to store id, name, email, contact for a given user. We should not allow adding multiple users with same email to the table.Ability to write data to the table using insert queries
+
+
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| student            |
+| sys                |
+| tutorials          |
+| user_ass1          |
+| world              |
++--------------------+
+9 rows in set (0.03 sec)
+
+mysql> use user_ass1;                                //This is my table.
+Database changed
+mysql> show tables;
++---------------------+
+| Tables_in_user_ass1 |
++---------------------+
+| studentclone        |
+| userinfo            |
++---------------------+
+2 rows in set (0.00 sec)
+
+mysql> drop table studentclone;
+Query OK, 0 rows affected (2.09 sec)
+
+mysql> show tables;
++---------------------+
+| Tables_in_user_ass1 |
++---------------------+
+| userinfo            |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> desc userInfo;                           //Table has email,contact,name,id;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| id      | int         | NO   |     | NULL    |       |
+| name    | varchar(20) | YES  |     | NULL    |       |
+| email   | varchar(30) | YES  | UNI | NULL    |       |
+| contact | varchar(10) | YES  | UNI | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> show full columns userInfo;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'userInfo' at line 1
+mysql> show full column userInfo;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'column userInfo' at line 1
+mysql> show full columns in userInfo;     //Full description of table;
++---------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| Field   | Type        | Collation          | Null | Key | Default | Extra | Privileges                      | Comment |
++---------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| id      | int         | NULL               | NO   |     | NULL    |       | select,insert,update,references |         |
+| name    | varchar(20) | utf8mb4_0900_ai_ci | YES  |     | NULL    |       | select,insert,update,references |         |
+| email   | varchar(30) | utf8mb4_0900_ai_ci | YES  | UNI | NULL    |       | select,insert,update,references |         |
+| contact | varchar(10) | utf8mb4_0900_ai_ci | YES  | UNI | NULL    |       | select,insert,update,references |         |
++---------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+4 rows in set (0.00 sec)
+
+mysql> select * from userInfo;
++----+------------+------------------------+------------+
+| id | name       | email                  | contact    |
++----+------------+------------------------+------------+
+|  1 | Aniket Raj | araj@vibrenthealth.com | 9709550684 |
+|  2 | Nikhil Raj | nraj@vibrenthealth.com | 8340178386 |
++----+------------+------------------------+------------+
+2 rows in set (0.04 sec)
+
+mysql> INSERT INTO userInfo VALUES(3,'Alok Bhawankar','araj@vibrenthealth.com','7654747756');  //Not allowing to have same email for multiple person;
+ERROR 1062 (23000): Duplicate entry 'araj@vibrenthealth.com' for key 'userinfo.email'
+mysql> INSERT INTO userInfo VALUES(3,'Alok Bhawankar','abhawkar@vibrenthealth.com','7654747756');
+Query OK, 1 row affected (0.64 sec)
+
+mysql> select * from userInfo;
++----+----------------+----------------------------+------------+
+| id | name           | email                      | contact    |
++----+----------------+----------------------------+------------+
+|  1 | Aniket Raj     | araj@vibrenthealth.com     | 9709550684 |
+|  2 | Nikhil Raj     | nraj@vibrenthealth.com     | 8340178386 |
+|  3 | Alok Bhawankar | abhawkar@vibrenthealth.com | 7654747756 |
++----+----------------+----------------------------+------------+
+3 rows in set (0.00 sec)
+
+
