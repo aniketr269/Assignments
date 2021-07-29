@@ -1,0 +1,1074 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+								FINAL DOCUMENTS 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Create a database scheme that captures all the below requirements. We have multiple students learning at an academy.Each student should be uniquely identifiable.The academy offers multiple courses.A student can take any number of courses.A student obtains a score for each subject when finishes the course.This is captured along with the date and time he completed the course.A student can repeat the same course multiple number of times and thus earns multiple scores for the same course as well.
+
+
+
+mysql> use Academy;
+Database changed
+mysql> CREATE TABLE Students(
+    -> student_id INT NOT NULL,
+    -> Student_Name varchar(20) NOT NULL,
+    -> Primary Key(student_id)
+    -> );
+Query OK, 0 rows affected (1.16 sec)
+
+mysql> CREATE TABLE Course(
+    -> Course_Code INT NOT NULL,
+    -> Course_Name varchar(20) NOT NULL,
+    -> Primary Key(Course_Code)
+    -> );
+Query OK, 0 rows affected (0.59 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_academy |
++-------------------+
+| course            |
+| students          |
++-------------------+
+2 rows in set (0.04 sec)
+
+mysql> show full columns in students;
++--------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| Field        | Type        | Collation          | Null | Key | Default | Extra | Privileges                      | Comment |
++--------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| student_id   | int         | NULL               | NO   | PRI | NULL    |       | select,insert,update,references |         |
+| Student_Name | varchar(20) | utf8mb4_0900_ai_ci | NO   |     | NULL    |       | select,insert,update,references |         |
++--------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+
+mysql> ALTER TABLE StudentAllotCourse
+    -> ADD FOREIGN KEY Course_Code REFERENCES Course(Course_Code);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'REFERENCES Course(Course_Code)' at line 2
+mysql> ALTER TABLE StudentAllotCourse
+    -> FOREIGN KEY (Course_Code) REFERENCES Course(Course_Code);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FOREIGN KEY (Course_Code) REFERENCES Course(Course_Code)' at line 2
+mysql> ALTER TABLE StudentAllotCourse
+    -> ADD FOREIGN KEY (Course_Code) REFERENCES Course(Course_Code);
+Query OK, 0 rows affected (3.78 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE StudentAllotCourse
+    -> ADD FOREIGN KEY (Student_id) REFERENCES Students(student_id);
+Query OK, 0 rows affected (1.66 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show tables;
++--------------------+
+| Tables_in_academy  |
++--------------------+
+| course             |
+| studentallotcourse |
+| students           |
++--------------------+
+3 rows in set (1.41 sec)
+
+mysql> show columns in students;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| student_id   | int         | NO   | PRI | NULL    |       |
+| Student_Name | varchar(20) | NO   |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+2 rows in set (0.03 sec)
+
+mysql> desc students;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| student_id   | int         | NO   | PRI | NULL    |       |
+| Student_Name | varchar(20) | NO   |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> show full columns in students;
++--------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| Field        | Type        | Collation          | Null | Key | Default | Extra | Privileges                      | Comment |
++--------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| student_id   | int         | NULL               | NO   | PRI | NULL    |       | select,insert,update,references |         |
+| Student_Name | varchar(20) | utf8mb4_0900_ai_ci | NO   |     | NULL    |       | select,insert,update,references |         |
++--------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> show full columns in COurse;
++-------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| Field       | Type        | Collation          | Null | Key | Default | Extra | Privileges                      | Comment |
++-------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| Course_Code | int         | NULL               | NO   | PRI | NULL    |       | select,insert,update,references |         |
+| Course_Name | varchar(20) | utf8mb4_0900_ai_ci | NO   |     | NULL    |       | select,insert,update,references |         |
++-------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> show full columns in studentallotcourse;
++-------------+------+-----------+------+-----+---------+-------+---------------------------------+---------+
+| Field       | Type | Collation | Null | Key | Default | Extra | Privileges                      | Comment |
++-------------+------+-----------+------+-----+---------+-------+---------------------------------+---------+
+| Course_Code | int  | NULL      | NO   | PRI | NULL    |       | select,insert,update,references |         |
+| Student_id  | int  | NULL      | NO   | PRI | NULL    |       | select,insert,update,references |         |
+| Marks       | int  | NULL      | YES  |     | NULL    |       | select,insert,update,references |         |
++-------------+------+-----------+------+-----+---------+-------+---------------------------------+---------+
+3 rows in set (0.10 sec)
+
+mysql> INSERT INTO students values(1,'Aniket Raj');
+Query OK, 1 row affected (0.20 sec)
+
+mysql> INSERT INTO students values(2,'Nikhil Raj),(3,'Rishav Raj');
+    '> ;
+    '> ^C
+mysql> select * from students;
++------------+--------------+
+| student_id | Student_Name |
++------------+--------------+
+|          1 | Aniket Raj   |
++------------+--------------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO students values(2,'Nikhil Raj);
+    '> ^C
+mysql> INSERT INTO students values(2,'Nikhil Raj'),(3,'Rishav Raj');
+Query OK, 2 rows affected (0.21 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from students;
++------------+--------------+
+| student_id | Student_Name |
++------------+--------------+
+|          1 | Aniket Raj   |
+|          2 | Nikhil Raj   |
+|          3 | Rishav Raj   |
++------------+--------------+
+3 rows in set (0.00 sec)
+
+mysql> INSERT INTO students values(4,'Gaurav Kakade'),(5,'Aditya Sharma'),(6,'Praful');
+Query OK, 3 rows affected (0.14 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from students;
++------------+---------------+
+| student_id | Student_Name  |
++------------+---------------+
+|          1 | Aniket Raj    |
+|          2 | Nikhil Raj    |
+|          3 | Rishav Raj    |
+|          4 | Gaurav Kakade |
+|          5 | Aditya Sharma |
+|          6 | Praful        |
++------------+---------------+
+6 rows in set (0.00 sec)
+
+mysql> show databses;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'databses' at line 1
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| academy            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| student            |
+| sys                |
+| tutorials          |
+| user_ass1          |
+| world              |
++--------------------+
+10 rows in set (0.06 sec)
+
+mysql> use academy;
+Database changed
+mysql> show tables;
++--------------------+
+| Tables_in_academy  |
++--------------------+
+| course             |
+| studentallotcourse |
+| students           |
++--------------------+
+3 rows in set (0.11 sec)
+
+mysql> alter table studentallotcourse
+    -> rename to student_alloted_course;
+Query OK, 0 rows affected (1.24 sec)
+
+mysql> show tables;
++------------------------+
+| Tables_in_academy      |
++------------------------+
+| course                 |
+| student_alloted_course |
+| students               |
++------------------------+
+3 rows in set (0.00 sec)
+
+mysql> desc course;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| Course_Code | int         | NO   | PRI | NULL    |       |
+| Course_Name | varchar(20) | NO   |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+2 rows in set (0.05 sec)
+
+mysql> alter table course
+    -> change column Course_Code course_code;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> change column Course_Code course_code int ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'column Course_Code course_code int' at line 1
+mysql> alter table course
+    -> change column Course_Code to course_code int ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'to course_code int' at line 2
+mysql> alter table course
+    -> rename column Course_Code to course_code ;
+Query OK, 0 rows affected (0.77 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table course
+    -> rename column Course_Name to course_name;
+Query OK, 0 rows affected (0.67 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc column;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'column' at line 1
+mysql> desc course;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| course_code | int         | NO   | PRI | NULL    |       |
+| course_name | varchar(20) | NO   |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+2 rows in set (0.31 sec)
+
+mysql> show tables;
++------------------------+
+| Tables_in_academy      |
++------------------------+
+| course                 |
+| student_alloted_course |
+| students               |
++------------------------+
+3 rows in set (0.00 sec)
+
+mysql> desc student_alloted_course;
++-------------+------+------+-----+---------+-------+
+| Field       | Type | Null | Key | Default | Extra |
++-------------+------+------+-----+---------+-------+
+| Course_Code | int  | NO   | PRI | NULL    |       |
+| Student_id  | int  | NO   | PRI | NULL    |       |
+| Marks       | int  | YES  |     | NULL    |       |
++-------------+------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+
+mysql> create table student_alloted_course
+    -> (
+    -> ind int not null auto_increment,
+    -> course_code int not null,
+    -> student_id int not null,
+    -> marks int not null,
+    -> primary key(ind),
+    -> foreign key(course_code) references course(course_code),
+    -> foreign key(student_id) references students(student_id)
+    -> );
+Query OK, 0 rows affected (1.98 sec)
+
+mysql> desc students;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| student_id   | int         | NO   | PRI | NULL    |       |
+| Student_Name | varchar(20) | NO   |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+2 rows in set (1.01 sec)
+
+mysql> alter table students
+    -> rename column Student_Name to student_name;
+Query OK, 0 rows affected (1.66 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show tables;
++------------------------+
+| Tables_in_academy      |
++------------------------+
+| course                 |
+| student_alloted_course |
+| students               |
++------------------------+
+3 rows in set (0.02 sec)
+
+mysql> desc students;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| student_id   | int         | NO   | PRI | NULL    |       |
+| student_name | varchar(20) | NO   |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql> desc course;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| course_code | int         | NO   | PRI | NULL    |       |
+| course_name | varchar(20) | NO   |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> show full columns in student_alloted_course;
++-------------+------+-----------+------+-----+---------+----------------+---------------------------------+---------+
+| Field       | Type | Collation | Null | Key | Default | Extra          | Privileges                      | Comment |
++-------------+------+-----------+------+-----+---------+----------------+---------------------------------+---------+
+| ind         | int  | NULL      | NO   | PRI | NULL    | auto_increment | select,insert,update,references |         |
+| course_code | int  | NULL      | NO   | MUL | NULL    |                | select,insert,update,references |         |
+| student_id  | int  | NULL      | NO   | MUL | NULL    |                | select,insert,update,references |         |
+| marks       | int  | NULL      | NO   |     | NULL    |                | select,insert,update,references |         |
++-------------+------+-----------+------+-----+---------+----------------+---------------------------------+---------+
+4 rows in set (0.01 sec)
+
+mysql> show full columns in student;
+ERROR 1146 (42S02): Table 'academy.student' doesn't exist
+mysql> show full columns in students;
++--------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| Field        | Type        | Collation          | Null | Key | Default | Extra | Privileges                      | Comment |
++--------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| student_id   | int         | NULL               | NO   | PRI | NULL    |       | select,insert,update,references |         |
+| student_name | varchar(20) | utf8mb4_0900_ai_ci | NO   |     | NULL    |       | select,insert,update,references |         |
++--------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> show full columns in course;
++-------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| Field       | Type        | Collation          | Null | Key | Default | Extra | Privileges                      | Comment |
++-------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| course_code | int         | NULL               | NO   | PRI | NULL    |       | select,insert,update,references |         |
+| course_name | varchar(20) | utf8mb4_0900_ai_ci | NO   |     | NULL    |       | select,insert,update,references |         |
++-------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> select * from students;
++------------+---------------+
+| student_id | student_name  |
++------------+---------------+
+|          1 | Aniket Raj    |
+|          2 | Nikhil Raj    |
+|          3 | Rishav Raj    |
+|          4 | Gaurav Kakade |
+|          5 | Aditya Sharma |
+|          6 | Praful        |
++------------+---------------+
+6 rows in set (0.10 sec)
+
+mysql> select * from course;
+Empty set (0.11 sec)
+
+mysql> insert into table course values(1,'Machine Learning');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table course values(1,'Machine Learning')' at line 1
+mysql> insert into  course values(1,'Machine Learning');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> alter table course
+    -> modify course_code int not null unique;
+Query OK, 0 rows affected (1.93 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show full columns in course;
++-------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| Field       | Type        | Collation          | Null | Key | Default | Extra | Privileges                      | Comment |
++-------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| course_code | int         | NULL               | NO   | PRI | NULL    |       | select,insert,update,references |         |
+| course_name | varchar(20) | utf8mb4_0900_ai_ci | NO   |     | NULL    |       | select,insert,update,references |         |
++-------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+2 rows in set (0.03 sec)
+
+mysql> insert into  course values(1,'Business Intelligence');
+ERROR 1406 (22001): Data too long for column 'course_name' at row 1
+mysql> insert into  course values(1,'Cloud Computing');
+ERROR 1062 (23000): Duplicate entry '1' for key 'course.PRIMARY'
+mysql> insert into  course values(2,'Cloud Computing');
+Query OK, 1 row affected (0.16 sec)
+
+mysql> alter table students
+    -> modify student_id int not null unique;
+Query OK, 0 rows affected (1.75 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table course
+    -> modify course_name varchar(40) not null;
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from course;
++-------------+------------------+
+| course_code | course_name      |
++-------------+------------------+
+|           1 | Machine Learning |
+|           2 | Cloud Computing  |
++-------------+------------------+
+2 rows in set (0.01 sec)
+
+mysql> insert into  course values(3,'Java Programming');
+Query OK, 1 row affected (0.10 sec)
+
+mysql> update course
+    -> set course_name='Business Intelligence'
+    -> where course_code=2;
+Query OK, 1 row affected (0.20 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> selelct * from course;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selelct * from course' at line 1
+mysql> select * from course;
++-------------+-----------------------+
+| course_code | course_name           |
++-------------+-----------------------+
+|           1 | Machine Learning      |
+|           2 | Business Intelligence |
+|           3 | Java Programming      |
++-------------+-----------------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from students;
++------------+---------------+
+| student_id | student_name  |
++------------+---------------+
+|          1 | Aniket Raj    |
+|          2 | Nikhil Raj    |
+|          3 | Rishav Raj    |
+|          4 | Gaurav Kakade |
+|          5 | Aditya Sharma |
+|          6 | Praful        |
++------------+---------------+
+6 rows in set (0.04 sec)
+
+mysql> select * from course;
++-------------+-----------------------+
+| course_code | course_name           |
++-------------+-----------------------+
+|           1 | Machine Learning      |
+|           2 | Business Intelligence |
+|           3 | Java Programming      |
++-------------+-----------------------+
+3 rows in set (0.00 sec)
+
+mysql> show full columns in student_alloted_course;
++-------------+------+-----------+------+-----+---------+----------------+---------------------------------+---------+
+| Field       | Type | Collation | Null | Key | Default | Extra          | Privileges                      | Comment |
++-------------+------+-----------+------+-----+---------+----------------+---------------------------------+---------+
+| ind         | int  | NULL      | NO   | PRI | NULL    | auto_increment | select,insert,update,references |         |
+| course_code | int  | NULL      | NO   | MUL | NULL    |                | select,insert,update,references |         |
+| student_id  | int  | NULL      | NO   | MUL | NULL    |                | select,insert,update,references |         |
+| marks       | int  | NULL      | NO   |     | NULL    |                | select,insert,update,references |         |
++-------------+------+-----------+------+-----+---------+----------------+---------------------------------+---------+
+4 rows in set (0.27 sec)
+
+mysql> insert into student_alloted_course
+    -> values(2,1,72
+    -> );
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into student_alloted_course
+    -> values(1,2,1,72);
+Query OK, 1 row affected (0.19 sec)
+
+mysql> select * from student_alloted_course;
++-----+-------------+------------+-------+
+| ind | course_code | student_id | marks |
++-----+-------------+------------+-------+
+|   1 |           2 |          1 |    72 |
++-----+-------------+------------+-------+
+1 row in set (0.00 sec)
+
+mysql> insert into student_alloted_course values(1,1,90);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into student_alloted_course values(,1,1,90);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',1,1,90)' at line 1
+mysql> insert into student_alloted_course values(12,1,1,90);
+Query OK, 1 row affected (0.23 sec)
+
+mysql> select * from student_alloted_course;
++-----+-------------+------------+-------+
+| ind | course_code | student_id | marks |
++-----+-------------+------------+-------+
+|   1 |           2 |          1 |    72 |
+|  12 |           1 |          1 |    90 |
++-----+-------------+------------+-------+
+2 rows in set (0.00 sec)
+
+mysql> alter table student_alloted_course
+    ->
+    -> c
+    -> ^C
+mysql> delete from student_alloted_course where ind=12;
+Query OK, 1 row affected (0.12 sec)
+
+mysql> select * from student_alloted_course;
++-----+-------------+------------+-------+
+| ind | course_code | student_id | marks |
++-----+-------------+------------+-------+
+|   1 |           2 |          1 |    72 |
++-----+-------------+------------+-------+
+1 row in set (0.00 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(1,1,72);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> select * from student_alloted_course;
++-----+-------------+------------+-------+
+| ind | course_code | student_id | marks |
++-----+-------------+------------+-------+
+|   1 |           2 |          1 |    72 |
+|  13 |           1 |          1 |    72 |
++-----+-------------+------------+-------+
+2 rows in set (0.01 sec)
+
+mysql> truncate student_alloted_course;
+Query OK, 0 rows affected (2.48 sec)
+
+mysql> select * from student_alloted_course;
+Empty set (0.74 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(2,1,72);
+Query OK, 1 row affected (0.20 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(1,1,90);
+Query OK, 1 row affected (0.12 sec)
+
+mysql> select * from student_alloted_course;
++-----+-------------+------------+-------+
+| ind | course_code | student_id | marks |
++-----+-------------+------------+-------+
+|   1 |           2 |          1 |    72 |
+|   2 |           1 |          1 |    90 |
++-----+-------------+------------+-------+
+2 rows in set (0.00 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(3,2,69);
+Query OK, 1 row affected (0.17 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(3,1,51);
+Query OK, 1 row affected (0.21 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(2,2,83);
+Query OK, 1 row affected (0.19 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(1,5,92);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(3,5,70);
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(2,6,74);
+Query OK, 1 row affected (0.19 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(1,4,87);
+Query OK, 1 row affected (0.16 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(3,4,98);
+Query OK, 1 row affected (0.08 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(3,3,42);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(2,1,61);
+Query OK, 1 row affected (0.16 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(3,5,89);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(2,6,54);
+Query OK, 1 row affected (0.08 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(1,1,44);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(3,3,79);
+Query OK, 1 row affected (0.12 sec)
+
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(3,100,79);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`academy`.`student_alloted_course`, CONSTRAINT `student_alloted_course_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`))
+mysql> insert into student_alloted_course(course_code,student_id,marks) values(4,1,79);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`academy`.`student_alloted_course`, CONSTRAINT `student_alloted_course_ibfk_1` FOREIGN KEY (`course_code`) REFERENCES `course` (`course_code`))
+mysql> show full column in students;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'column in students' at line 1
+mysql> show full column in student;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'column in student' at line 1
+mysql> show full columns in students;
++--------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| Field        | Type        | Collation          | Null | Key | Default | Extra | Privileges                      | Comment |
++--------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| student_id   | int         | NULL               | NO   | PRI | NULL    |       | select,insert,update,references |         |
+| student_name | varchar(20) | utf8mb4_0900_ai_ci | NO   |     | NULL    |       | select,insert,update,references |         |
++--------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+2 rows in set (0.19 sec)
+
+mysql> show full columns in course;
++-------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| Field       | Type        | Collation          | Null | Key | Default | Extra | Privileges                      | Comment |
++-------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| course_code | int         | NULL               | NO   | PRI | NULL    |       | select,insert,update,references |         |
+| course_name | varchar(40) | utf8mb4_0900_ai_ci | NO   |     | NULL    |       | select,insert,update,references |         |
++-------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+2 rows in set (0.02 sec)
+
+mysql> show full columns in student_alloted_course;
++-------------+------+-----------+------+-----+---------+----------------+---------------------------------+---------+
+| Field       | Type | Collation | Null | Key | Default | Extra          | Privileges                      | Comment |
++-------------+------+-----------+------+-----+---------+----------------+---------------------------------+---------+
+| ind         | int  | NULL      | NO   | PRI | NULL    | auto_increment | select,insert,update,references |         |
+| course_code | int  | NULL      | NO   | MUL | NULL    |                | select,insert,update,references |         |
+| student_id  | int  | NULL      | NO   | MUL | NULL    |                | select,insert,update,references |         |
+| marks       | int  | NULL      | NO   |     | NULL    |                | select,insert,update,references |         |
++-------------+------+-----------+------+-----+---------+----------------+---------------------------------+---------+
+4 rows in set (0.00 sec)
+
+mysql> select * from students;
++------------+---------------+
+| student_id | student_name  |
++------------+---------------+
+|          1 | Aniket Raj    |
+|          2 | Nikhil Raj    |
+|          3 | Rishav Raj    |
+|          4 | Gaurav Kakade |
+|          5 | Aditya Sharma |
+|          6 | Praful        |
++------------+---------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from course
+    -> ;
++-------------+-----------------------+
+| course_code | course_name           |
++-------------+-----------------------+
+|           1 | Machine Learning      |
+|           2 | Business Intelligence |
+|           3 | Java Programming      |
++-------------+-----------------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from student_alloted_course;
++-----+-------------+------------+-------+
+| ind | course_code | student_id | marks |
++-----+-------------+------------+-------+
+|   1 |           2 |          1 |    72 |
+|   2 |           1 |          1 |    90 |
+|   3 |           3 |          2 |    69 |
+|   4 |           3 |          1 |    51 |
+|   5 |           2 |          2 |    83 |
+|   6 |           1 |          5 |    92 |
+|   7 |           3 |          5 |    70 |
+|   8 |           2 |          6 |    74 |
+|   9 |           1 |          4 |    87 |
+|  10 |           3 |          4 |    98 |
+|  11 |           3 |          3 |    42 |
+|  12 |           2 |          1 |    61 |
+|  13 |           3 |          5 |    89 |
+|  14 |           2 |          6 |    54 |
+|  15 |           1 |          1 |    44 |
+|  16 |           3 |          3 |    79 |
++-----+-------------+------------+-------+
+16 rows in set (0.00 sec)
+
+
+-------------------------Average of all the scores obtained by all the students for any single given course------------------------------------------
+
+
+mysql> select avg(marks) as Average_of_MachineLearning from student_alloted_course where course_code=1;
++----------------------------+
+| Average_of_MachineLearning |
++----------------------------+
+|                    78.2500 |
++----------------------------+
+1 row in set (0.12 sec)
+
+mysql> select avg(marks) as Average_of_BusinessIntelligence from student_alloted_course where course_code=2;
++---------------------------------+
+| Average_of_BusinessIntelligence |
++---------------------------------+
+|                         68.8000 |
++---------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select avg(marks) as Average_of_JavaProgramming from student_alloted_course where course_code=3;
++----------------------------+
+| Average_of_JavaProgramming |
++----------------------------+
+|                    71.1429 |
++----------------------------+
+1 row in set (0.00 sec)
+
+
+
+
+
+----------------------------Scorecard for any given student that shows all his scores for all of the courses----------------------------------------
+
+mysql> select student_alloted_course.course_code,course.course_name,student_alloted_course.marks from course,student_alloted_course where course.course_code=student_alloted_course.course_code and student_alloted_course.student_id=1;
++-------------+-----------------------+-------+
+| course_code | course_name           | marks |
++-------------+-----------------------+-------+
+|           1 | Machine Learning      |    90 |
+|           1 | Machine Learning      |    44 |
+|           2 | Business Intelligence |    72 |
+|           2 | Business Intelligence |    61 |
+|           3 | Java Programming      |    51 |
++-------------+-----------------------+-------+
+5 rows in set (0.00 sec)
+
+mysql> select student_alloted_course.course_code,course.course_name,student_alloted_course.marks from course,student_alloted_course where course.course_code=student_alloted_course.course_code and student_alloted_course.student_id=2;
++-------------+-----------------------+-------+
+| course_code | course_name           | marks |
++-------------+-----------------------+-------+
+|           2 | Business Intelligence |    83 |
+|           3 | Java Programming      |    69 |
++-------------+-----------------------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select student_alloted_course.course_code,course.course_name,student_alloted_course.marks from course,student_alloted_course where course.course_code=student_alloted_course.course_code and student_alloted_course.student_id=3;
++-------------+------------------+-------+
+| course_code | course_name      | marks |
++-------------+------------------+-------+
+|           3 | Java Programming |    42 |
+|           3 | Java Programming |    79 |
++-------------+------------------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select student_alloted_course.course_code,course.course_name,student_alloted_course.marks from course,student_alloted_course where course.course_code=student_alloted_course.course_code and student_alloted_course.student_id=4;
++-------------+------------------+-------+
+| course_code | course_name      | marks |
++-------------+------------------+-------+
+|           1 | Machine Learning |    87 |
+|           3 | Java Programming |    98 |
++-------------+------------------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select student_alloted_course.course_code,course.course_name,student_alloted_course.marks from course,student_alloted_course where course.course_code=student_alloted_course.course_code and student_alloted_course.student_id=5;
++-------------+------------------+-------+
+| course_code | course_name      | marks |
++-------------+------------------+-------+
+|           1 | Machine Learning |    92 |
+|           3 | Java Programming |    70 |
+|           3 | Java Programming |    89 |
++-------------+------------------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select student_alloted_course.course_code,course.course_name,student_alloted_course.marks from course,student_alloted_course where course.course_code=student_alloted_course.course_code and student_alloted_course.student_id=6;
++-------------+-----------------------+-------+
+| course_code | course_name           | marks |
++-------------+-----------------------+-------+
+|           2 | Business Intelligence |    74 |
+|           2 | Business Intelligence |    54 |
++-------------+-----------------------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select @mac:= student_alloted_course.course_code,course.course_name,student_alloted_course.marks from course,student_alloted_course where course.course_code=student_alloted_course.course_code and student_alloted_course.student_id=5;
++-------------------------------------------+------------------+-------+
+| @mac:= student_alloted_course.course_code | course_name      | marks |
++-------------------------------------------+------------------+-------+
+|                                         1 | Machine Learning |    92 |
+|                                         3 | Java Programming |    70 |
+|                                         3 | Java Programming |    89 |
++-------------------------------------------+------------------+-------+
+
+
+
+------------------Scorecard for any given student that shows only his best score per course----------------------------------------------------------------------------
+
+
+
+mysql>  select student_alloted_course.course_code,course.course_name,student_alloted_course.marks from course,student_alloted_course where course.course_code=student_alloted_course.course_code and student_alloted_course.student_id=1;
++-------------+-----------------------+-------+
+| course_code | course_name           | marks |
++-------------+-----------------------+-------+
+|           1 | Machine Learning      |    44 |
+|           1 | Machine Learning      |    90 |
+|           2 | Business Intelligence |    61 |
+|           2 | Business Intelligence |    72 |
+|           3 | Java Programming      |    51 |
++-------------+-----------------------+-------+
+5 rows in set (0.00 sec)
+
+mysql> select course_code,max(marks) as mks from student_alloted_course where student_id=1 group by course_code;
++-------------+------+
+| course_code | mks  |
++-------------+------+
+|           2 |   72 |
+|           1 |   90 |
+|           3 |   51 |
++-------------+------+
+3 rows in set (0.00 sec)
+
+mysql> select course_code,max(marks) as mks from student_alloted_course where student_id=1 group by course_code order  by course_code;
++-------------+------+
+| course_code | mks  |
++-------------+------+
+|           1 |   90 |
+|           2 |   72 |
+|           3 |   51 |
++-------------+------+
+3 rows in set (0.00 sec)
+
+mysql>  select student_alloted_course.course_code,course.course_name,student_alloted_course.marks from course,student_alloted_course where course.course_code=student_alloted_course.course_code and student_alloted_course.student_id=2;
++-------------+-----------------------+-------+
+| course_code | course_name           | marks |
++-------------+-----------------------+-------+
+|           2 | Business Intelligence |    83 |
+|           3 | Java Programming      |    69 |
++-------------+-----------------------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select course_code,max(marks) as mks from student_alloted_course where student_id=2 group by course_code order  by course_code;
++-------------+------+
+| course_code | mks  |
++-------------+------+
+|           2 |   83 |
+|           3 |   69 |
++-------------+------+
+2 rows in set (0.00 sec)
+
+mysql>  select student_alloted_course.course_code,course.course_name,student_alloted_course.marks from course,student_alloted_course where course.course_code=student_alloted_course.course_code and student_alloted_course.student_id=3;
++-------------+------------------+-------+
+| course_code | course_name      | marks |
++-------------+------------------+-------+
+|           3 | Java Programming |    79 |
+|           3 | Java Programming |    42 |
++-------------+------------------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select course_code,max(marks) as mks from student_alloted_course where student_id=3 group by course_code order  by course_code;
++-------------+------+
+| course_code | mks  |
++-------------+------+
+|           3 |   79 |
++-------------+------+
+1 row in set (0.00 sec)
+
+mysql>  select student_alloted_course.course_code,course.course_name,student_alloted_course.marks from course,student_alloted_course where course.course_code=student_alloted_course.course_code and student_alloted_course.student_id=4;
++-------------+------------------+-------+
+| course_code | course_name      | marks |
++-------------+------------------+-------+
+|           1 | Machine Learning |    87 |
+|           3 | Java Programming |    98 |
++-------------+------------------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select course_code,max(marks) as mks from student_alloted_course where student_id=4 group by course_code order  by course_code;
++-------------+------+
+| course_code | mks  |
++-------------+------+
+|           1 |   87 |
+|           3 |   98 |
++-------------+------+
+2 rows in set (0.00 sec)
+
+mysql>  select student_alloted_course.course_code,course.course_name,student_alloted_course.marks from course,student_alloted_course where course.course_code=student_alloted_course.course_code and student_alloted_course.student_id=5;
++-------------+------------------+-------+
+| course_code | course_name      | marks |
++-------------+------------------+-------+
+|           1 | Machine Learning |    92 |
+|           3 | Java Programming |    89 |
+|           3 | Java Programming |    70 |
++-------------+------------------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select course_code,max(marks) as mks from student_alloted_course where student_id=5 group by course_code order  by course_code;
++-------------+------+
+| course_code | mks  |
++-------------+------+
+|           1 |   92 |
+|           3 |   89 |
++-------------+------+
+2 rows in set (0.00 sec)
+
+mysql>  select student_alloted_course.course_code,course.course_name,student_alloted_course.marks from course,student_alloted_course where course.course_code=student_alloted_course.course_code and student_alloted_course.student_id=6;
++-------------+-----------------------+-------+
+| course_code | course_name           | marks |
++-------------+-----------------------+-------+
+|           2 | Business Intelligence |    54 |
+|           2 | Business Intelligence |    74 |
++-------------+-----------------------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select course_code,max(marks) as mks from student_alloted_course where student_id=6 group by course_code order  by course_code;
++-------------+------+
+| course_code | mks  |
++-------------+------+
+|           2 |   74 |
++-------------+------+
+1 row in set (0.00 sec)
+
+
+
+
+
+
+--------------This shows the best score per course-----------------------------------
+
+mysql> select course_code,max(marks) as mks from student_alloted_course group by course_code;
++-------------+------+
+| course_code | mks  |
++-------------+------+
+|           1 |   92 |
+|           2 |   83 |
+|           3 |   98 |
++-------------+------+
+3 rows in set (0.00 sec)
+
+
+
+----------The best score obtained (by any students) per course along with the name of the student. Kind of the like topper of each course.----------------------
+
+mysql> select students.student_name,student_alloted_course.marks from students,student_alloted_course where students.student_id=student_alloted_course.student_id and student_alloted_course.marks in (select max(marks) from student_alloted_course group by course_code);
++---------------+-------+
+| student_name  | marks |
++---------------+-------+
+| Nikhil Raj    |    83 |
+| Gaurav Kakade |    98 |
+| Aditya Sharma |    92 |
++---------------+-------+
+3 rows in set (0.09 sec)
+
+mysql> select students.student_name,student_alloted_course.marks,stduent_alloted_course.course_code from students,student_alloted_course where students.student_id=student_alloted_course.student_id and student_alloted_course.marks in (select max(marks) from student_alloted_course group by course_code);
+ERROR 1054 (42S22): Unknown column 'stduent_alloted_course.course_code' in 'field list'
+mysql> select students.student_name,student_alloted_course.marks,student_alloted_course.course_code from students,student_alloted_course where students.student_id=student_alloted_course.student_id and student_alloted_course.marks in (select max(marks) from student_alloted_course group by course_code);
++---------------+-------+-------------+
+| student_name  | marks | course_code |
++---------------+-------+-------------+
+| Nikhil Raj    |    83 |           2 |
+| Gaurav Kakade |    98 |           3 |
+| Aditya Sharma |    92 |           1 |
++---------------+-------+-------------+
+3 rows in set (0.00 sec)
+
+
+
+
+mysql> select * from student_alloted_course order by exam_date;
++-----+-------------+------------+-------+------------+
+| ind | course_code | student_id | marks | exam_date  |
++-----+-------------+------------+-------+------------+
+|   2 |           1 |          1 |    90 | 2021-04-21 |
+|   6 |           1 |          5 |    92 | 2021-04-21 |
+|   9 |           1 |          4 |    87 | 2021-04-21 |
+|   1 |           2 |          1 |    72 | 2021-04-22 |
+|   5 |           2 |          2 |    83 | 2021-04-22 |
+|   8 |           2 |          6 |    74 | 2021-04-22 |
+|   3 |           3 |          2 |    69 | 2021-04-23 |
+|   4 |           3 |          1 |    51 | 2021-04-23 |
+|   7 |           3 |          5 |    70 | 2021-04-23 |
+|  10 |           3 |          4 |    98 | 2021-04-23 |
+|  11 |           3 |          3 |    42 | 2021-04-23 |
+|  15 |           1 |          1 |    44 | 2021-07-10 |
+|  12 |           2 |          1 |    61 | 2021-07-11 |
+|  14 |           2 |          6 |    54 | 2021-07-11 |
+|  13 |           3 |          5 |    89 | 2021-07-12 |
+|  16 |           3 |          3 |    79 | 2021-07-12 |
++-----+-------------+------------+-------+------------+
+
+
+
+--------------Scorecard for any given student that shows only his latest score per course---------------------------------------------------
+
+mysql> select max(exam_date) as mks from student_alloted_course;
++------------+
+| mks        |
++------------+
+| 2021-07-12 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select max(exam_date) as mks from student_alloted_course where student_id=1;
++------------+
+| mks        |
++------------+
+| 2021-07-11 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select max(exam_date) as mks from student_alloted_course where student_id=1 group by course_code;
++------------+
+| mks        |
++------------+
+| 2021-07-11 |
+| 2021-07-10 |
+| 2021-04-23 |
++------------+
+3 rows in set (0.00 sec)
+
+mysql> select max(exam_date) as mks,student_id,course_code from student_alloted_course where student_id=1 group by course_code;
++------------+------------+-------------+
+| mks        | student_id | course_code |
++------------+------------+-------------+
+| 2021-07-11 |          1 |           2 |
+| 2021-07-10 |          1 |           1 |
+| 2021-04-23 |          1 |           3 |
++------------+------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> select max(exam_date) as mks,student_id,course_code from student_alloted_course where student_id=1 order by course_code group by course_code
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'group by course_code' at line 1
+mysql> select max(exam_date) as mks,student_id,course_code from student_alloted_course where student_id=1  group by course_code order by course_code;
++------------+------------+-------------+
+| mks        | student_id | course_code |
++------------+------------+-------------+
+| 2021-07-10 |          1 |           1 |
+| 2021-07-11 |          1 |           2 |
+| 2021-04-23 |          1 |           3 |
++------------+------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> select max(exam_date) as mks,student_id,course_code from student_alloted_course where student_id=2  group by course_code order by course_code;
++------------+------------+-------------+
+| mks        | student_id | course_code |
++------------+------------+-------------+
+| 2021-04-22 |          2 |           2 |
+| 2021-04-23 |          2 |           3 |
++------------+------------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> select max(exam_date) as mks,student_id,course_code from student_alloted_course where student_id=6  group by course_code order by course_code;
++------------+------------+-------------+
+| mks        | student_id | course_code |
++------------+------------+-------------+
+| 2021-07-11 |          6 |           2 |
++------------+------------+-------------+
+1 row in set (0.00 sec)
+
+mysql> select max(exam_date) as mks,student_id,course_code from student_alloted_course where student_id=3  group by course_code order by course_code;
++------------+------------+-------------+
+| mks        | student_id | course_code |
++------------+------------+-------------+
+| 2021-07-12 |          3 |           3 |
++------------+------------+-------------+
+1 row in set (0.00 sec)
+
+mysql> select max(exam_date) as mks,student_id,course_code from student_alloted_course where student_id=4  group by course_code order by course_code;
++------------+------------+-------------+
+| mks        | student_id | course_code |
++------------+------------+-------------+
+| 2021-04-21 |          4 |           1 |
+| 2021-04-23 |          4 |           3 |
++------------+------------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> select max(exam_date) as mks,student_id,course_code from student_alloted_course where student_id=5  group by course_code order by course_code;
++------------+------------+-------------+
+| mks        | student_id | course_code |
++------------+------------+-------------+
+| 2021-04-21 |          5 |           1 |
+| 2021-07-12 |          5 |           3 |
++------------+------------+-------------+
+2 rows in set (0.00 sec)
+
+
+
+
+
+
+--------------
+Implementation link-----https://vignetcorp-my.sharepoint.com/:v:/g/personal/araj_vibrenthealth_com/ETmOVUXEiB1FumWmaRNKDDcB_dUVk3v-2i7sggd-QidSNA?e=qG3gUr
