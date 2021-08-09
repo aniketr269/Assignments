@@ -54,3 +54,24 @@ Assignment 2:---–Create a database scheme that captures all the below requirem
         Scorecard for any given student that shows only his best score per course.
         Scorecard for any given student that shows only his latest score per course.
         The best score obtained (by any students) per course along with the name of the student. Kind of the like topper of each course.
+        
+        
+WEEK 4
+
+Day 1 – Hello world spring boot app
+
+Day 5
+– Create a spring boot application. The application should have following
+3 REST Endpoints (GET, POST, DELETE)
+          
+          GET Endpoint should take 2 query parameters (one required and one
+       non required, validate them and return a dummy response)
+
+     POST Endpoint should take an object of User class as request body,
+     validate it and return a dummy response
+
+     DELETE Endpoint should take in a single required query parameter and
+     return a dummy response.
+
+    All the 3 endpoints should have some specific hardcoded cases where
+    they return different HTTP Errors (For example i
