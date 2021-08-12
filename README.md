@@ -40,20 +40,20 @@ user. We should not allow adding multiple users with same email to the table. Ab
 
 
 Assignment 2:---–Create a database scheme that captures all the below requirements.
-  We have multiple students learning at an academy.
-  Each student should be uniquely identifiable
-  The academy offers multiple courses.
-  A student can take any number of courses
-  A student obtains a score for each subject when finishes the course.
-  This is captured along with the date and time he completed the course.
-  A student can repeat the same course multiple number of times and thus earns multiple scores for the same course as well.
-  
-  We should be able to write queries to fetch the following details
-        Average of all the scores obtained by all the students for any single given course
-        Scorecard for any given student that shows all his scores for all of the courses
-        Scorecard for any given student that shows only his best score per course.
-        Scorecard for any given student that shows only his latest score per course.
-        The best score obtained (by any students) per course along with the name of the student. Kind of the like topper of each course.
+        We have multiple students learning at an academy.
+        Each student should be uniquely identifiable
+        The academy offers multiple courses.
+        A student can take any number of courses
+        A student obtains a score for each subject when finishes the course.
+        This is captured along with the date and time he completed the course.
+        A student can repeat the same course multiple number of times and thus earns multiple scores for the same course as well.
+
+        We should be able to write queries to fetch the following details
+              Average of all the scores obtained by all the students for any single given course
+              Scorecard for any given student that shows all his scores for all of the courses
+              Scorecard for any given student that shows only his best score per course.
+              Scorecard for any given student that shows only his latest score per course.
+              The best score obtained (by any students) per course along with the name of the student. Kind of the like topper of each course.
         
         
 WEEK 4
@@ -74,4 +74,25 @@ Day 5
      return a dummy response.
 
     All the 3 endpoints should have some specific hardcoded cases where
-    they return different HTTP Errors (For example i
+    they return different HTTP Errors.
+
+
+WEEK 5
+
+Day 5
+
+     Create a spring boot application. The application should have following
+          -Connect to the DB that was created during MySQL assignment from
+          spring application
+          -Create entities that map to DB Tables
+          -Create 5 API Endpoints
+              -A POST API – Takes in the details required for Student table as request
+              body, validates it and the student is then saved in DB
+              -A PUT API – Takes the details required for Student table as request
+              body, validate it and update the existing student in DB.
+              -A GET API – Takes the id as path parameter and return the Student
+              details based on id
+              -A GET API – Takes a string as request parameter and returns the list of
+              students whose name matches the request parameter
+              -A DELETE API – Takes the id as parameter and deletes the record from
+              database
